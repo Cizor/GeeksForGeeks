@@ -1,27 +1,33 @@
 //C program for Matrix Multiplication
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> //For malloc
 
 #define PRINT_MATRIX_VALUES 0
 
 
 void matrix_multiplication(int *first[],int *second[],int fRows,int fColumns,int sRows,int sColumns){
-	int i = 0,j =0;
+	int i = 0,j =0,k=0,l=0;
 	int sum = 0;
-	int temp = 0;
-	for(i = 0; i < fRows; i++){
-		sum = 0;
-		for(j=0;j < sColumns;j++){
-			temp = 0;
-			printf("%d and %d\n",first[i][j],second[j][i]);
-			printf("Check: %d\n",first[i][j] * second[j][i]);
-			temp = first[i][j] * second[j][i];
-			sum += temp;
-		}
-		printf("%d\n",sum);
-	}
+	int temp[fColumns];
 	
+	if(fColumns == sRows){   //For multiplication viabilit
+		for(k=0;k<fRows;k++){
+			temp[fColumns] = 0;
+			for(l = 0;l < fColumns;l++){
+				temp[l] = first[k][l];
+			}
+			for(i=0;i<sRows;i++){
+					sum = 0;
+					for(j=0;j<sColumns;j++){
+						sum+=temp[j]*second[j][i];
+					}
+					printf("Result Matrix Cell Values [%d,%d] : %d\n",k+1,i+1,sum);
+			}
+		}
+	}else{
+		printf("\nMatrix Multiplication is not viable as number of columns in first matrix is not equal to number of rows in second matrix\n");
+	}
 }
 
 void print_matrix(int *matrix[],int rows, int columns){
