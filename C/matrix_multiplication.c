@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h> //For malloc
 
-#define PRINT_MATRIX_VALUES 0
+#define PRINT_MATRIX_VALUES 1
 
 
 void matrix_multiplication(int *first[],int *second[],int fRows,int fColumns,int sRows,int sColumns){
@@ -11,21 +11,39 @@ void matrix_multiplication(int *first[],int *second[],int fRows,int fColumns,int
 	int sum = 0;
 	int temp[fColumns];
 	
-	if(fColumns == sRows){   //For multiplication viabilit
+	if(fColumns == sRows){   //For multiplication viability
+#if 0
+	//Higher complexity
 		for(k=0;k<fRows;k++){
 			temp[fColumns] = 0;
 			for(l = 0;l < fColumns;l++){
 				temp[l] = first[k][l];
 			}
-			for(i=0;i<sRows;i++){
+			for(i=0;i<sColumns;i++){
 					sum = 0;
-					for(j=0;j<sColumns;j++){
+					for(j=0;j<sRows;j++){
 						sum+=temp[j]*second[j][i];
 					}
 					printf("Result Matrix Cell Values [%d,%d] : %d\n",k+1,i+1,sum);
 			}
 		}
-	}else{
+	}
+#endif
+#if 1
+	//Lower complexity
+		for(i = 0;i<fRows;i++){
+			for(j=0;j<sColumns;j++){
+				sum = 0;
+				for(k=0;k<fColumns;k++){
+					sum += first[i][k]*second[k][j];
+					printf("%d and %d = %d\n",first[i][k],second[k][j],sum);
+				}
+				printf("Check: %d\n",sum);
+			}
+		}
+	}
+#endif
+	else{
 		printf("\nMatrix Multiplication is not viable as number of columns in first matrix is not equal to number of rows in second matrix\n");
 	}
 }
@@ -44,8 +62,8 @@ void print_matrix(int *matrix[],int rows, int columns){
 int main(){
 	//Hardcoding row and column nos. in both matrices rather than taking from user, as logic matters
 	int first_rows = 3;
-	int first_columns = 3;
-	int second_rows = 3;
+	int first_columns = 4;
+	int second_rows = 4;
 	int second_columns = 3;
 
 	//counters
@@ -77,7 +95,9 @@ int main(){
 		}
 	}
 #if PRINT_MATRIX_VALUES
+	printf("FIRST MATRIX\n");
 	print_matrix(a,first_rows,first_columns);
+	printf("SECOND MATRIX\n");
 	print_matrix(b,second_rows,second_columns);
 #endif
 	matrix_multiplication(a,b,first_rows,first_columns,second_rows,second_columns);
